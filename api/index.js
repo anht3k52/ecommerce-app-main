@@ -18,7 +18,7 @@ app.listen(port, () => {
 });
 
 mongoose
-  .connect("mongodb+srv://sujananand:sujan@cluster0.cueelai.mongodb.net/", {
+  .connect("mongodb+srv://anht3k52:anhem123A@cluster0.7l6hvqe.mongodb.net/", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -38,8 +38,8 @@ const sendVerificationEmail = async (email, verificationToken) => {
     // Configure the email service or SMTP details here
     service: "gmail",
     auth: {
-      user: "sujananand0@gmail.com",
-      pass: "wkkjjprzkqxtboju",
+      user: "buinifufu52@gmail.com",
+      pass: "anhem123",
     },
   });
 
