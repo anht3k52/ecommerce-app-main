@@ -409,16 +409,16 @@ const ConfirmationScreen = () => {
               <Entypo
                 onPress={() => {
                   setSelectedOption("card");
-                  Alert.alert("UPI/Debit card", "Pay Online", [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel is pressed"),
-                    },
-                    {
-                      text: "OK",
-                      onPress: () => pay(),
-                    },
-                  ]);
+                  // Alert.alert("UPI/Debit card", "Pay Online", [
+                  //   {
+                  //     text: "Cancel",
+                  //     onPress: () => console.log("Cancel is pressed"),
+                  //   },
+                  //   {
+                  //     text: "OK",
+                  //     onPress: () => pay(),
+                  //   },
+                  // ]);
                 }}
                 name="circle"
                 size={20}

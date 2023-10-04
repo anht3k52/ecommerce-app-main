@@ -7,7 +7,7 @@ import {
   Image,
   KeyboardAvoidingView,
   TextInput,
-  Alert,
+  // Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -30,22 +30,26 @@ const RegisterScreen = () => {
 
     // send a POST  request to the backend API to register the user
     axios
-      .post("http://localhost:8000/register", user)
+      .post("http://localhost:8000/register", user, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
       .then((response) => {
         console.log(response);
-        Alert.alert(
-          "Registration successful",
-          "You have been registered Successfully"
-        );
+        //  Alert.alert(
+        //  "Registration successful",
+        //   "You have been registered Successfully"
+        // );
         setName("");
         setEmail("");
         setPassword("");
       })
       .catch((error) => {
-        Alert.alert(
-          "Registration Error",
-          "An error occurred while registering"
-        );
+        // Alert.alert(
+        //    "Registration Error",
+        //   "An error occurred while registering"
+        // );
         console.log("registration failed", error);
       });
   };

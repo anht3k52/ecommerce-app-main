@@ -40,7 +40,11 @@ const LoginScreen = () => {
     };
 
     axios
-      .post("http://localhost:8000/login", user)
+      .post("http://localhost:8000/login", user, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
       .then((response) => {
         console.log(response);
         const token = response.data.token;
@@ -48,8 +52,8 @@ const LoginScreen = () => {
         navigation.replace("Main");
       })
       .catch((error) => {
-        Alert.alert("Login Error", "Invalid Email");
-        console.log(error);
+        // Alert.alert("Login Error", "Invalid Email");
+        console.log(error, "error123");
       });
   };
   return (

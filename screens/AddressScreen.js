@@ -45,7 +45,7 @@ const AddressScreen = () => {
       }
 
       axios.post("http://localhost:8000/addresses",{userId,address}).then((response) => {
-          Alert.alert("Success","Addresses added successfully");
+          // Alert.alert("Success","Addresses added successfully");
           setName("");
           setMobileNo("");
           setHouseNo("");
@@ -57,7 +57,7 @@ const AddressScreen = () => {
             navigation.goBack();
           },500)
       }).catch((error) => {
-          Alert.alert("Error","Failed to add address")
+          // Alert.alert("Error","Failed to add address")
           console.log("error",error)
       })
   }
