@@ -17,8 +17,7 @@ app.listen(port, () => {
   console.log("Server is running on port 8000");
 });
 
-mongoose
-  .connect("mongodb+srv://anht3k52:anht3k52@cluster0.gmpoeu3.mongodb.net/", {
+mongoose.connect("mongodb+srv://anht3k52:anhem123A@cluster0.7l6hvqe.mongodb.net/", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
