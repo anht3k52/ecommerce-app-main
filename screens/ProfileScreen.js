@@ -18,6 +18,10 @@ const ProfileScreen = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+  const navigateToCart = () => {
+    // Điều hướng sang trang giỏ hàng khi nhấn vào Pressable
+    navigation.navigate("Cart"); // Thay thế "Cart" bằng tên màn hình của trang giỏ hàng
+  };
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "",
@@ -26,11 +30,10 @@ const ProfileScreen = () => {
       },
       headerLeft: () => (
         <Image
-          style={{ width: 140, height: 120, resizeMode: "contain" }}
-          source={{
-            uri: "https://assets.stickpng.com/thumbs/580b57fcd9996e24bc43c518.png",
-          }}
-        />
+        style={{ width: 140, height: 120, resizeMode: "contain" }}
+        source={require('./logo.png')}
+      />
+      
       ),
       headerRight: () => (
         <View
@@ -53,7 +56,7 @@ const ProfileScreen = () => {
     const fetchUserProfile = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/profile/${userId}`
+          `http://10.0.61.254:8080/profile/${userId}`
         );
         const { user } = response.data;
         setUser(user);
@@ -76,7 +79,7 @@ const ProfileScreen = () => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/orders/${userId}`
+          `http://10.0.61.254:8080/orders/${userId}`
         );
         const orders = response.data.orders;
         setOrders(orders);
@@ -93,7 +96,7 @@ const ProfileScreen = () => {
   return (
     <ScrollView style={{ padding: 10, flex: 1, backgroundColor: "white" }}>
       <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-        Welcome {user?.name}
+        Chào mừng {user?.name}
       </Text>
 
       <View
@@ -105,6 +108,7 @@ const ProfileScreen = () => {
         }}
       >
         <Pressable
+        onPress={navigateToCart}
           style={{
             padding: 10,
             backgroundColor: "#E0E0E0",
@@ -112,7 +116,7 @@ const ProfileScreen = () => {
             flex: 1,
           }}
         >
-          <Text style={{ textAlign: "center" }}>Your orders</Text>
+          <Text style={{ textAlign: "center" }}>Đơn hàng của bạn</Text>
         </Pressable>
 
         <Pressable
@@ -123,7 +127,7 @@ const ProfileScreen = () => {
             flex: 1,
           }}
         >
-          <Text style={{ textAlign: "center" }}>Your Account</Text>
+          <Text style={{ textAlign: "center" }}>Tài khoản của bạn</Text>
         </Pressable>
       </View>
 
@@ -143,7 +147,7 @@ const ProfileScreen = () => {
             flex: 1,
           }}
         >
-          <Text style={{ textAlign: "center" }}>Buy Again</Text>
+          <Text style={{ textAlign: "center" }}>Mua lại đơn hàng</Text>
         </Pressable>
 
         <Pressable
@@ -155,7 +159,7 @@ const ProfileScreen = () => {
             flex: 1,
           }}
         >
-          <Text style={{ textAlign: "center" }}>Logout</Text>
+          <Text style={{ textAlign: "center" }}>Đăng xuất</Text>
         </Pressable>
       </View>
 
@@ -189,7 +193,7 @@ const ProfileScreen = () => {
             </Pressable>
           ))
         ) : (
-          <Text>No orders found</Text>
+          <Text>Không tìm thấy đơn hàng nào</Text>
         )}
       </ScrollView>
     </ScrollView>

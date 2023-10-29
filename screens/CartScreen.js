@@ -63,17 +63,17 @@ const CartScreen = () => {
             size={22}
             color="black"
           />
-          <TextInput placeholder="Search Amazon.in" />
+          <TextInput placeholder="Tìm kiếm" />
         </Pressable>
 
         <Feather name="mic" size={24} color="black" />
       </View>
 
       <View style={{ padding: 10, flexDirection: "row", alignItems: "center" }}>
-        <Text style={{ fontSize: 18, fontWeight: "400" }}>Subtotal : </Text>
+        <Text style={{ fontSize: 18, fontWeight: "400" }}>Tổng đơn hàng : </Text>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>{total}</Text>
       </View>
-      <Text style={{ marginHorizontal: 10 }}>EMI details Available</Text>
+      <Text style={{ marginHorizontal: 10 }}>Chi tiết EMI có sẵn</Text>
 
       <Pressable
         onPress={() => navigation.navigate("Confirm")}
@@ -87,7 +87,7 @@ const CartScreen = () => {
           marginTop: 10,
         }}
       >
-        <Text>Proceed to Buy ({cart.length}) items</Text>
+        <Text>Tiến hành mua ({cart.length}) sản phẩm</Text>
       </Pressable>
 
       <Text
@@ -142,7 +142,7 @@ const CartScreen = () => {
                     uri: "https://assets.stickpng.com/thumbs/5f4924cc68ecc70004ae7065.png",
                   }}
                 />
-                <Text style={{ color: "green" }}>In Stock</Text>
+                <Text style={{ color: "green" }}>Trong kho</Text>
                 {/* <Text style={{ fontWeight: "500", marginTop: 6 }}>
                   {item?.rating?.rate} ratings
                 </Text> */}
@@ -216,6 +216,7 @@ const CartScreen = () => {
                 </Pressable>
               </View>
               <Pressable
+              key="delete"
                 onPress={() => deleteItem(item)}
                 style={{
                   backgroundColor: "white",
@@ -226,7 +227,7 @@ const CartScreen = () => {
                   borderWidth: 0.6,
                 }}
               >
-                <Text>Delete</Text>
+                <Text>Xóa sản phẩm</Text>
               </Pressable>
             </Pressable>
 
@@ -239,6 +240,7 @@ const CartScreen = () => {
               }}
             >
               <Pressable
+              key="save"
                 style={{
                   backgroundColor: "white",
                   paddingHorizontal: 8,
@@ -248,10 +250,11 @@ const CartScreen = () => {
                   borderWidth: 0.6,
                 }}
               >
-                <Text>Save For Later</Text>
+                <Text>Lưu lại sản phẩm</Text>
               </Pressable>
 
               <Pressable
+              key="see"
                 style={{
                   backgroundColor: "white",
                   paddingHorizontal: 8,
@@ -261,7 +264,7 @@ const CartScreen = () => {
                   borderWidth: 0.6,
                 }}
               >
-                <Text>See More Like this</Text>
+                <Text>Xem thêm sản phẩm tương tự</Text>
               </Pressable>
             </Pressable>
           </View>

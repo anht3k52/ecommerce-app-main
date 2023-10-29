@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+let count = 0; // Khởi tạo biến đếm
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -22,11 +23,12 @@ const userSchema = new mongoose.Schema({
   verificationToken: String,
   addresses: [
     {
-      name: String,
-      mobileNo: String,
+    
+       name: String,
+      sdt: String,
       houseNo: String,
       street: String,
-      landmark: String,
+      khuvuc: String,
       city: String,
       country: String,
       postalCode: String,

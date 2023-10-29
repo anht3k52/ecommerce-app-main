@@ -5,19 +5,19 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 
 const app = express();
-const port = 8000;
+const port = 8080;
 const cors = require("cors");
-// app.use(cors());
+ app.use(cors());
 app.use(cors({origin: true, credentials: true}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const jwt = require("jsonwebtoken");
 app.listen(port, () => {
-  console.log("Server is running on port 8000");
+  console.log("Server is running on port 8080");
 });
 
-mongoose.connect("mongodb+srv://anht3k52:anhem123A@cluster0.7l6hvqe.mongodb.net/", {
+mongoose.connect("mongodb+srv://anht3k52:anht3k52@cluster0.jz1npka.mongodb.net/", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -47,7 +47,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
     from: "amazon.com",
     to: email,
     subject: "Email Verification",
-    text: `Please click the following link to verify your email: http://localhost:8000/verify/${verificationToken}`,
+    text: `Please click the following link to verify your email: http://10.0.61.254:8080/verify/${verificationToken}`,
   };
 
   // Send the email

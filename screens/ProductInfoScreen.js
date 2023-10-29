@@ -152,7 +152,7 @@ const ProductInfoScreen = () => {
         </Text>
 
         <Text style={{ fontSize: 18, fontWeight: "600", marginTop: 6 }}>
-          ₹{route?.params?.price}
+          đ{route?.params?.price}
         </Text>
       </View>
 
@@ -176,10 +176,10 @@ const ProductInfoScreen = () => {
 
       <View style={{ padding: 10 }}>
         <Text style={{ fontSize: 15, fontWeight: "bold", marginVertical: 5 }}>
-          Total : ₹{route.params.price}
+          Total : đ{route.params.price}
         </Text>
         <Text style={{ color: "#00CED1" }}>
-          FREE delivery Tomorrow by 3 PM.Order within 10hrs 30 mins
+        Giao hàng MIỄN PHÍ vào ngày mai trước 3 giờ chiều.Đặt hàng trong vòng 10 giờ 30 phút
         </Text>
 
         <View
@@ -193,13 +193,13 @@ const ProductInfoScreen = () => {
           <Ionicons name="location" size={24} color="black" />
 
           <Text style={{ fontSize: 15, fontWeight: "500" }}>
-            Deliver To Sujan - Bangalore 560019
+          Giao hàng cho Bùi Xuân Sơn - 560019
           </Text>
         </View>
       </View>
 
       <Text style={{ color: "green", marginHorizontal: 10, fontWeight: "500" }}>
-        IN Stock
+      Trong kho
       </Text>
 
       <Pressable
@@ -216,14 +216,15 @@ const ProductInfoScreen = () => {
       >
         {addedToCart ? (
           <View>
-            <Text>Added to Cart</Text>
+            <Text>Đã thêm giỏ hàng</Text>
           </View>
         ) : (
-          <Text>Add to Cart</Text>
+          <Text>Thêm vào giỏ</Text>
         )}
       </Pressable>
 
       <Pressable
+      key="product"
         style={{
           backgroundColor: "#FFAC1C",
           padding: 10,
@@ -234,7 +235,7 @@ const ProductInfoScreen = () => {
           marginVertical: 10,
         }}
       >
-        <Text>Buy Now</Text>
+        <Text>Mua ngay</Text>
       </Pressable>
     </ScrollView>
   );

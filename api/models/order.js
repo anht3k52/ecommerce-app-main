@@ -35,7 +35,7 @@ const orderSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    mobileNo: {
+    sdt: {
       type: String,
       required: true,
     },
@@ -47,7 +47,7 @@ const orderSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    landmark: {
+    khuvuc: {
       type: String,
       required: true,
     },

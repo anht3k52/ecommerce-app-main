@@ -27,7 +27,7 @@ const StackNavigator = () => {
           name="Home"
           component={HomeScreen}
           options={{
-            tabBarLabel: "Home",
+            tabBarLabel: "Trang chủ",
             tabBarLabelStyle: { color: "#008E97" },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
@@ -43,7 +43,7 @@ const StackNavigator = () => {
           name="Profile"
           component={ProfileScreen}
           options={{
-            tabBarLabel: "Profile",
+            tabBarLabel: "Tài khoản",
             tabBarLabelStyle: { color: "#008E97" },
             tabBarIcon: ({ focused }) =>
               focused ? (
@@ -58,7 +58,7 @@ const StackNavigator = () => {
           name="Cart"
           component={CartScreen}
           options={{
-            tabBarLabel: "Cart",
+            tabBarLabel: "Giỏ hàng",
             tabBarLabelStyle: { color: "#008E97" },
             headerShown: false,
             tabBarIcon: ({ focused }) =>

@@ -7,7 +7,7 @@ import {
   Image,
   KeyboardAvoidingView,
   TextInput,
-  // Alert,
+   Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -30,27 +30,27 @@ const RegisterScreen = () => {
 
     // send a POST  request to the backend API to register the user
     axios
-      .post("http://localhost:8000/register", user, {
+      .post("http://10.0.61.254:8080/register", user, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
       .then((response) => {
         console.log(response);
-        //  Alert.alert(
-        //  "Registration successful",
-        //   "You have been registered Successfully"
-        // );
+         Alert.alert(
+         "Đăng ký thành công",
+          "Bạn đã đăng ký thành công"
+         );
         setName("");
         setEmail("");
         setPassword("");
       })
       .catch((error) => {
-        // Alert.alert(
-        //    "Registration Error",
-        //   "An error occurred while registering"
-        // );
-        console.log("registration failed", error);
+         Alert.alert(
+           "Lỗi đăng ký",
+          "Đã xảy ra lỗi khi đăng ký"
+         );
+        console.log("đăng ký thất bại", error);
       });
   };
   return (
@@ -60,9 +60,7 @@ const RegisterScreen = () => {
       <View>
         <Image
           style={{ width: 150, height: 100 }}
-          source={{
-            uri: "https://assets.stickpng.com/thumbs/6160562276000b00045a7d97.png",
-          }}
+          source={require("../assets/logo.png")}
         />
       </View>
 
@@ -76,7 +74,7 @@ const RegisterScreen = () => {
               color: "#041E42",
             }}
           >
-            Register to your Account
+            Đăng ký tài khoản của bạn
           </Text>
         </View>
 
@@ -107,7 +105,7 @@ const RegisterScreen = () => {
                 width: 300,
                 fontSize: name ? 16 : 16,
               }}
-              placeholder="enter your name"
+              placeholder="nhập tên của bạn"
             />
           </View>
 
@@ -138,7 +136,7 @@ const RegisterScreen = () => {
                 width: 300,
                 fontSize: password ? 16 : 16,
               }}
-              placeholder="enter your Email"
+              placeholder="nhập email của bạn"
             />
           </View>
         </View>
@@ -172,57 +170,44 @@ const RegisterScreen = () => {
                 width: 300,
                 fontSize: email ? 16 : 16,
               }}
-              placeholder="enter your Password"
+              placeholder="nhập mật khẩu của bạn"
             />
           </View>
-        </View>
-
-        <View
-          style={{
-            marginTop: 12,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text>Keep me logged in</Text>
-
-          <Text style={{ color: "#007FFF", fontWeight: "500" }}>
-            Forgot Password
-          </Text>
         </View>
 
         <View style={{ marginTop: 80 }} />
 
         <Pressable
-          onPress={handleRegister}
-          style={{
-            width: 200,
-            backgroundColor: "#FEBE10",
-            borderRadius: 6,
-            marginLeft: "auto",
-            marginRight: "auto",
-            padding: 15,
-          }}
-        >
-          <Text
-            style={{
-              textAlign: "center",
-              color: "white",
-              fontSize: 16,
-              fontWeight: "bold",
-            }}
-          >
-            Register
-          </Text>
-        </Pressable>
+  key="registerButton" // Thêm key vào đây
+  onPress={handleRegister}
+  style={{
+    width: 200,
+    backgroundColor: "#FEBE10",
+    borderRadius: 6,
+    marginLeft: "auto",
+    marginRight: "auto",
+    padding: 15,
+  }}
+>
+  <Text
+    style={{
+      textAlign: "center",
+      color: "white",
+      fontSize: 16,
+      fontWeight: "bold",
+    }}
+  >
+    Đăng ký
+  </Text>
+</Pressable>
+
 
         <Pressable
           onPress={() => navigation.goBack()}
           style={{ marginTop: 15 }}
         >
           <Text style={{ textAlign: "center", color: "gray", fontSize: 16 }}>
-            Already have an account? Sign In
+            Bạn đã có sẵn một tài khoản? Đăng nhập
           </Text>
         </Pressable>
       </KeyboardAvoidingView>

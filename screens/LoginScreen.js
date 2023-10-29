@@ -6,6 +6,7 @@ import {
   Image,
   KeyboardAvoidingView,
   TextInput,
+  Alert,
   Pressable,
 } from "react-native";
 import React, { useState,useEffect } from "react";
@@ -40,32 +41,51 @@ const LoginScreen = () => {
     };
 
     axios
-      .post("http://localhost:8000/login", user, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then((response) => {
-        console.log(response);
-        const token = response.data.token;
-        AsyncStorage.setItem("authToken", token);
-        navigation.replace("Main");
-      })
-      .catch((error) => {
-        // Alert.alert("Login Error", "Invalid Email");
-        console.log(error, "error123");
-      });
+    .post("http://10.0.61.254:8080/login", user, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => {
+      console.log(response);
+      const token = response.data.token;
+      AsyncStorage.setItem("authToken", token);
+      navigation.replace("Main");
+      
+      // Hiển thị thông báo khi đăng nhập thành công
+      Alert.alert("Đăng nhập thành công", "Bạn đã đăng nhập thành công!");
+    })
+    .catch((error) => {
+      if (error.response) {
+        // Xử lý lỗi từ phía máy chủ (có phản hồi từ máy chủ)
+        console.log("Lỗi phản hồi từ máy chủ:", error.response.data);
+        
+        // Hiển thị thông báo khi có lỗi phản hồi từ máy chủ
+        Alert.alert("Lỗi đăng nhập", "Sai tài khoản hoặc mật khẩu đăng nhập. Vui lòng thử lại .");
+      } else if (error.request) {
+        // Không có phản hồi từ máy chủ (yêu cầu không được gửi đi)
+        console.log("Không có phản hồi từ máy chủ. Yêu cầu không được gửi đi.");
+        
+        // Hiển thị thông báo khi không có phản hồi từ máy chủ
+        Alert.alert("Lỗi đăng nhập", "Yêu cầu không được gửi đi. Vui lòng kiểm tra kết nối mạng của bạn.");
+      } else {
+        // Lỗi khác xảy ra trong quá trình thiết lập yêu cầu
+        console.error("Lỗi:", error.message);
+        
+        // Hiển thị thông báo khi có lỗi khác xảy ra
+        Alert.alert("Lỗi đăng nhập", "Có lỗi không xác định khi đăng nhập. Vui lòng thử lại sau.");
+      }
+    });
+  
   };
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "white", alignItems: "center",marginTop:50 }}
+      style={{ flex: 1, backgroundColor:"white" ,alignItems: "center",marginTop:50 }}
     >
       <View>
         <Image
           style={{ width: 150, height: 100 }}
-          source={{
-            uri: "https://assets.stickpng.com/thumbs/6160562276000b00045a7d97.png",
-          }}
+          source={require("../assets/logo.png")}
         />
       </View>
 
@@ -79,7 +99,7 @@ const LoginScreen = () => {
               color: "#041E42",
             }}
           >
-            Login In to your Account
+            Đăng nhập tài khoản của bạn
           </Text>
         </View>
 
@@ -111,7 +131,7 @@ const LoginScreen = () => {
                 width: 300,
                 fontSize: email ? 16 : 16,
               }}
-              placeholder="enter your Email"
+              placeholder="nhập email của bạn"
             />
           </View>
         </View>
@@ -145,7 +165,7 @@ const LoginScreen = () => {
                 width: 300,
                 fontSize: password ? 16 : 16,
               }}
-              placeholder="enter your Password"
+              placeholder="nhập mật khẩu của bạn"
             />
           </View>
         </View>
@@ -158,10 +178,10 @@ const LoginScreen = () => {
             justifyContent: "space-between",
           }}
         >
-          <Text>Keep me logged in</Text>
+          <Text>Giữ luôn đăng nhập</Text>
 
           <Text style={{ color: "#007FFF", fontWeight: "500" }}>
-            Forgot Password
+            Quên mật khẩu
           </Text>
         </View>
 
@@ -186,16 +206,17 @@ const LoginScreen = () => {
               fontWeight: "bold",
             }}
           >
-            Login
+            Đăng nhập
           </Text>
         </Pressable>
 
         <Pressable
+        key="register"
           onPress={() => navigation.navigate("Register")}
           style={{ marginTop: 15 }}
         >
           <Text style={{ textAlign: "center", color: "gray", fontSize: 16 }}>
-            Don't have an account? Sign Up
+          Bạn chưa có tài khoản? Đăng ký
           </Text>
         </Pressable>
       </KeyboardAvoidingView>

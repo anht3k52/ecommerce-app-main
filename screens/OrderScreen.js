@@ -34,7 +34,7 @@ const OrderScreen = () => {
           textAlign: "center",
         }}
       >
-        Your Order Has been Recieved
+        Đơn hàng của bạn đã được nhận
       </Text>
       <LottieView
         source={require("../assets/sparkle.json")}

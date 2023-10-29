@@ -8,6 +8,8 @@ import {
   Pressable,
   TextInput,
   Image,
+  TouchableOpacity,
+  Linking,
 } from "react-native";
 import React, { useState, useEffect, useCallback, useContext } from "react";
 import { Feather } from "@expo/vector-icons";
@@ -31,36 +33,36 @@ const HomeScreen = () => {
     {
       id: "0",
       image: "https://m.media-amazon.com/images/I/41EcYoIZhIL._AC_SY400_.jpg",
-      name: "Home",
+      name: "Trang chủ",
     },
     {
       id: "1",
       image:
         "https://m.media-amazon.com/images/G/31/img20/Events/Jup21dealsgrid/blockbuster.jpg",
-      name: "Deals",
+      name: "Ưu đãi",
     },
     {
       id: "3",
       image:
         "https://images-eu.ssl-images-amazon.com/images/I/31dXEvtxidL._AC_SX368_.jpg",
-      name: "Electronics",
+      name: "Điện tử",
     },
     {
       id: "4",
       image:
         "https://m.media-amazon.com/images/G/31/img20/Events/Jup21dealsgrid/All_Icons_Template_1_icons_01.jpg",
-      name: "Mobiles",
+      name: "Điện thoại",
     },
     {
       id: "5",
       image:
         "https://m.media-amazon.com/images/G/31/img20/Events/Jup21dealsgrid/music.jpg",
-      name: "Music",
+      name: "Âm nhạc",
     },
     {
       id: "6",
       image: "https://m.media-amazon.com/images/I/51dZ19miAbL._AC_SY350_.jpg",
-      name: "Fashion",
+      name: "Thời trang",
     },
   ];
   const images = [
@@ -138,9 +140,9 @@ const HomeScreen = () => {
       id: "0",
       title:
         "Oppo Enco Air3 Pro True Wireless in Ear Earbuds with Industry First Composite Bamboo Fiber, 49dB ANC, 30H Playtime, 47ms Ultra Low Latency,Fast Charge,BT 5.3 (Green)",
-      offer: "72% off",
-      oldPrice: 7500,
-      price: 4500,
+      offer: "72% ",
+      oldPrice: 7500000,
+      price: 4500000,
       image:
         "https://m.media-amazon.com/images/I/61a2y1FCAJL._AC_UL640_FMwebp_QL65_.jpg",
       carouselImages: [
@@ -196,6 +198,24 @@ const HomeScreen = () => {
       size: "8GB RAM, 128GB Storage",
     },
   ];
+  const [searchText, setSearchText] = useState("");
+
+  const handleSearch = () => {
+    // Thực hiện xử lý tìm kiếm dựa trên searchText
+    // Ví dụ: in ra giá trị searchText hoặc gọi hàm tìm kiếm thực tế ở đây.
+    console.log("Search Text:", searchText);
+  };
+  const openGoogleMaps = () => {
+    // Vị trí Đại học Điện lực Hà Nội, Việt Nam
+    const latitude = 21.0473; // Vĩ độ của Đại học Điện lực Hà Nội
+    const longitude = 105.8048; // Kinh độ của Đại học Điện lực Hà Nội
+  
+    // Tạo URL với vị trí của Đại học Điện lực Hà Nội
+    const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+  
+    // Mở Google Maps với URL này
+    Linking.openURL(url);
+  };
   const [products, setProducts] = useState([]);
   const navigation = useNavigation();
   const [open, setOpen] = useState(false);
@@ -236,7 +256,7 @@ const HomeScreen = () => {
   const fetchAddresses = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/addresses/${userId}`
+        `http://10.0.61.254:8080/addresses/${userId}`
       );
       const { addresses } = response.data;
 
@@ -275,6 +295,8 @@ const HomeScreen = () => {
             }}
           >
             <Pressable
+            onPress={handleSearch}
+            key="search"
               style={{
                 flexDirection: "row",
                 alignItems: "center",
@@ -292,13 +314,19 @@ const HomeScreen = () => {
                 size={22}
                 color="black"
               />
-              <TextInput placeholder="Search Amazon.in" />
+                <TextInput
+          style={styles.searchInput}
+          placeholder="Tìm kiếm"
+          value={searchText}
+          onChangeText={(text) => setSearchText(text)}
+        />
             </Pressable>
 
             <Feather name="mic" size={24} color="black" />
           </View>
 
           <Pressable
+          key="color"
             onPress={() => setModalVisible(!modalVisible)}
             style={{
               flexDirection: "row",
@@ -317,7 +345,7 @@ const HomeScreen = () => {
                 </Text>
               ) : (
                 <Text style={{ fontSize: 13, fontWeight: "500" }}>
-                    Add a Address
+                    Thêm địa chỉ
                 </Text>
               )}
             </Pressable>
@@ -364,7 +392,7 @@ const HomeScreen = () => {
           />
 
           <Text style={{ padding: 10, fontSize: 18, fontWeight: "bold" }}>
-            Trending Deals of the week
+            Ưu đãi thịnh hành trong tuần
           </Text>
 
           <View
@@ -412,7 +440,7 @@ const HomeScreen = () => {
           />
 
           <Text style={{ padding: 10, fontSize: 18, fontWeight: "bold" }}>
-            Today's Deals
+          Ưu đãi hôm nay
           </Text>
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -460,7 +488,7 @@ const HomeScreen = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    Upto {item?.offer}
+                    Giảm {item?.offer}
                   </Text>
                 </View>
               </Pressable>
@@ -537,12 +565,11 @@ const HomeScreen = () => {
         <ModalContent style={{ width: "100%", height: 400 }}>
           <View style={{ marginBottom: 8 }}>
             <Text style={{ fontSize: 16, fontWeight: "500" }}>
-              Choose your Location
+            Chọn vị trí của bạn
             </Text>
 
             <Text style={{ marginTop: 5, fontSize: 16, color: "gray" }}>
-              Select a delivery location to see product availabilty and delivery
-              options
+            Chọn địa điểm giao hàng để xem tình trạng còn hàng của sản phẩm và các tùy chọn giao hàng
             </Text>
           </View>
 
@@ -578,7 +605,7 @@ const HomeScreen = () => {
                   numberOfLines={1}
                   style={{ width: 130, fontSize: 13, textAlign: "center" }}
                 >
-                  {item?.houseNo},{item?.landmark}
+                  {item?.houseNo},{item?.khuvuc}
                 </Text>
 
                 <Text
@@ -591,12 +618,13 @@ const HomeScreen = () => {
                   numberOfLines={1}
                   style={{ width: 130, fontSize: 13, textAlign: "center" }}
                 >
-                  India, Bangalore
+                  VietNam, HaNoi
                 </Text>
               </Pressable>
             ))}
 
             <Pressable
+            key="address"
               onPress={() => {
                 setModalVisible(false);
                 navigation.navigate("Address");
@@ -619,7 +647,7 @@ const HomeScreen = () => {
                   fontWeight: "500",
                 }}
               >
-                Add an Address or pick-up point
+                Thêm địa chỉ hoặc điểm đón
               </Text>
             </Pressable>
           </ScrollView>
@@ -630,18 +658,20 @@ const HomeScreen = () => {
             >
               <Entypo name="location-pin" size={22} color="#0066b2" />
               <Text style={{ color: "#0066b2", fontWeight: "400" }}>
-                Enter an Indian pincode
+              Nhập mã pincode Tiếng Việt
               </Text>
             </View>
 
-            <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
-            >
-              <Ionicons name="locate-sharp" size={22} color="#0066b2" />
-              <Text style={{ color: "#0066b2", fontWeight: "400" }}>
-                Use My Currect location
-              </Text>
-            </View>
+            <View>
+      <TouchableOpacity onPress={openGoogleMaps}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+          <Ionicons name="locate-sharp" size={22} color="#0066b2" />
+          <Text style={{ color: "#0066b2", fontWeight: "400" }}>
+            Sử dụng Vị trí hiện tại của tôi trên Google Maps
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </View>
 
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
@@ -649,7 +679,7 @@ const HomeScreen = () => {
               <AntDesign name="earth" size={22} color="#0066b2" />
 
               <Text style={{ color: "#0066b2", fontWeight: "400" }}>
-                Deliver outside India
+              Giao hàng ngoài Việt Nam
               </Text>
             </View>
           </View>

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Pressable,Alert } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Pressable, Alert } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { UserType } from "../UserContext";
@@ -11,11 +11,19 @@ import RazorpayCheckout from "react-native-razorpay";
 
 const ConfirmationScreen = () => {
   const steps = [
-    { title: "Address", content: "Address Form" },
-    { title: "Delivery", content: "Delivery Options" },
-    { title: "Payment", content: "Payment Details" },
-    { title: "Place Order", content: "Order Summary" },
+    { title: "Địa chỉ", content: "Mẫu địa chỉ" },
+    { title: "Vận chuyển", content: "Tùy chọn giao hàng" },
+    { title: "Thanh toán", content: "Chi tiết thanh toán" },
+    { title: "Đặt hàng", content: "Hóa đơn" },
   ];
+  const now = new Date();
+  const utc = now.getTime() + now.getTimezoneOffset() * 60000; // Convert to UTC time
+  const vietnamTime = new Date(utc + 3600000 * 7); // Convert to Vietnam time (GMT+7)
+
+  const formattedTime = vietnamTime.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+  });
   const navigation = useNavigation();
   const [currentStep, setCurrentStep] = useState(0);
   const [addresses, setAddresses] = useState([]);
@@ -29,14 +37,11 @@ const ConfirmationScreen = () => {
   }, []);
   const fetchAddresses = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/addresses/${userId}`
-      );
+      const response = await axios.get(`http://10.0.61.254:8080/addresses/${userId}`);
       const { addresses } = response.data;
-
       setAddresses(addresses);
     } catch (error) {
-      console.log("error", error);
+      console.log("Lỗi khi thực hiện lời gọi GET /addresses:", error);
     }
   };
   const dispatch = useDispatch();
@@ -53,25 +58,22 @@ const ConfirmationScreen = () => {
         paymentMethod: selectedOption,
       };
 
-      const response = await axios.post(
-        "http://localhost:8000/orders",
-        orderData
-      );
+      const response = await axios.post("http://10.0.61.254:8080/orders", orderData);
       if (response.status === 200) {
         navigation.navigate("Order");
         dispatch(cleanCart());
-        console.log("order created successfully", response.data);
+        console.log("Đơn hàng được tạo thành công", response.data);
       } else {
-        console.log("error creating order", response.data);
+        console.log("Lỗi tạo đơn hàng", response.data);
       }
     } catch (error) {
-      console.log("errror", error);
+      console.log("Lỗi khi thực hiện lời gọi POST /orders:", error);
     }
   };
   const pay = async () => {
     try {
       const options = {
-        description: "Adding To Wallet",
+        description: "Thêm vào ví",
         currency: "INR",
         name: "Amazon",
         key: "rzp_test_E3GWYimxN7YMk8",
@@ -96,19 +98,16 @@ const ConfirmationScreen = () => {
         paymentMethod: "card",
       };
 
-      const response = await axios.post(
-        "http://localhost:8000/orders",
-        orderData
-      );
+      const response = await axios.post("http://10.0.61.254:8080/orders", orderData);
       if (response.status === 200) {
         navigation.navigate("Order");
         dispatch(cleanCart());
-        console.log("order created successfully", response.data);
+        console.log("Đơn hàng được tạo thành công", response.data);
       } else {
-        console.log("error creating order", response.data);
+        console.log("Lỗi tạo đơn hàng", response.data);
       }
     } catch (error) {
-      console.log("error", error);
+      console.log("Lỗi khi thực hiện lời gọi POST /orders2:", error);
     }
   };
   return (
@@ -170,7 +169,7 @@ const ConfirmationScreen = () => {
       {currentStep == 0 && (
         <View style={{ marginHorizontal: 20 }}>
           <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-            Select Delivery Address
+            Chọn địa chỉ giao hàng
           </Text>
 
           <Pressable>
@@ -214,7 +213,7 @@ const ConfirmationScreen = () => {
                   </View>
 
                   <Text style={{ fontSize: 15, color: "#181818" }}>
-                    {item?.houseNo}, {item?.landmark}
+                    {item?.houseNo} {item?.khuvuc}
                   </Text>
 
                   <Text style={{ fontSize: 15, color: "#181818" }}>
@@ -222,14 +221,14 @@ const ConfirmationScreen = () => {
                   </Text>
 
                   <Text style={{ fontSize: 15, color: "#181818" }}>
-                    India, Bangalore
+                    Cầu Giấy, Hà Nội, Việt Nam
                   </Text>
 
                   <Text style={{ fontSize: 15, color: "#181818" }}>
-                    phone No : {item?.mobileNo}
+                    Số điện thoại : {item?.sdt}
                   </Text>
                   <Text style={{ fontSize: 15, color: "#181818" }}>
-                    pin code : {item?.postalCode}
+                    Mã xác thực : {item?.postalCode}
                   </Text>
 
                   <View
@@ -250,7 +249,7 @@ const ConfirmationScreen = () => {
                         borderColor: "#D0D0D0",
                       }}
                     >
-                      <Text>Edit</Text>
+                      <Text>Sửa</Text>
                     </Pressable>
 
                     <Pressable
@@ -263,7 +262,7 @@ const ConfirmationScreen = () => {
                         borderColor: "#D0D0D0",
                       }}
                     >
-                      <Text>Remove</Text>
+                      <Text>Xóa</Text>
                     </Pressable>
 
                     <Pressable
@@ -276,13 +275,14 @@ const ConfirmationScreen = () => {
                         borderColor: "#D0D0D0",
                       }}
                     >
-                      <Text>Set as Default</Text>
+                      <Text>Đặt làm mặc định</Text>
                     </Pressable>
                   </View>
 
                   <View>
                     {selectedAddress && selectedAddress._id === item?._id && (
                       <Pressable
+                        key="deliver"
                         onPress={() => setCurrentStep(1)}
                         style={{
                           backgroundColor: "#008397",
@@ -294,7 +294,7 @@ const ConfirmationScreen = () => {
                         }}
                       >
                         <Text style={{ textAlign: "center", color: "white" }}>
-                          Deliver to this Address
+                          Gửi đến địa chỉ này
                         </Text>
                       </Pressable>
                     )}
@@ -309,7 +309,7 @@ const ConfirmationScreen = () => {
       {currentStep == 1 && (
         <View style={{ marginHorizontal: 20 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-            Choose your delivery options
+            Chọn tùy chọn giao hàng của bạn
           </Text>
 
           <View
@@ -337,9 +337,11 @@ const ConfirmationScreen = () => {
 
             <Text style={{ flex: 1 }}>
               <Text style={{ color: "green", fontWeight: "500" }}>
-                Tomorrow by 10pm
-              </Text>{" "}
-              - FREE delivery with your Prime membership
+                {formattedTime}
+              </Text>
+
+              {" "}
+              - Giao hàng miễn phí với tư cách thành viên Prime của bạn
             </Text>
           </View>
 
@@ -354,7 +356,7 @@ const ConfirmationScreen = () => {
               marginTop: 15,
             }}
           >
-            <Text>Continue</Text>
+            <Text>Tiếp Tục</Text>
           </Pressable>
         </View>
       )}
@@ -362,7 +364,7 @@ const ConfirmationScreen = () => {
       {currentStep == 2 && (
         <View style={{ marginHorizontal: 20 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-            Select your payment Method
+            Chọn phương thức thanh toán của bạn
           </Text>
 
           <View
@@ -388,7 +390,7 @@ const ConfirmationScreen = () => {
               />
             )}
 
-            <Text>Cash on Delivery</Text>
+            <Text>Thanh toán khi nhận hàng</Text>
           </View>
 
           <View
@@ -409,16 +411,16 @@ const ConfirmationScreen = () => {
               <Entypo
                 onPress={() => {
                   setSelectedOption("card");
-                  // Alert.alert("UPI/Debit card", "Pay Online", [
-                  //   {
-                  //     text: "Cancel",
-                  //     onPress: () => console.log("Cancel is pressed"),
-                  //   },
-                  //   {
-                  //     text: "OK",
-                  //     onPress: () => pay(),
-                  //   },
-                  // ]);
+                  Alert.alert("Thẻ ngân hàng/Thẻ ghi nợ", "Thanh toán trực tuyến", [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel is pressed"),
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => pay(),
+                    },
+                  ]);
                 }}
                 name="circle"
                 size={20}
@@ -426,9 +428,10 @@ const ConfirmationScreen = () => {
               />
             )}
 
-            <Text>UPI / Credit or debit card</Text>
+            <Text>Thẻ ngân hàng/Thẻ ghi nợ</Text>
           </View>
           <Pressable
+            key="continue"
             onPress={() => setCurrentStep(3)}
             style={{
               backgroundColor: "#FFC72C",
@@ -446,7 +449,7 @@ const ConfirmationScreen = () => {
 
       {currentStep === 3 && selectedOption === "cash" && (
         <View style={{ marginHorizontal: 20 }}>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Order Now</Text>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Đặt hàng ngay</Text>
 
           <View
             style={{
@@ -463,10 +466,10 @@ const ConfirmationScreen = () => {
           >
             <View>
               <Text style={{ fontSize: 17, fontWeight: "bold" }}>
-                Save 5% and never run out
+                Giảm giá 30%
               </Text>
               <Text style={{ fontSize: 15, color: "gray", marginTop: 5 }}>
-                Turn on auto deliveries
+                Bật giao hàng tự động
               </Text>
             </View>
 
@@ -486,7 +489,7 @@ const ConfirmationScreen = () => {
               marginTop: 10,
             }}
           >
-            <Text>Shipping to {selectedAddress?.name}</Text>
+            <Text>Vận chuyển đến {selectedAddress?.name}</Text>
 
             <View
               style={{
@@ -497,10 +500,10 @@ const ConfirmationScreen = () => {
               }}
             >
               <Text style={{ fontSize: 16, fontWeight: "500", color: "gray" }}>
-                Items
+                Mặt hàng
               </Text>
 
-              <Text style={{ color: "gray", fontSize: 16 }}>₹{total}</Text>
+              <Text style={{ color: "gray", fontSize: 16 }}>đ{total}</Text>
             </View>
 
             <View
@@ -512,10 +515,10 @@ const ConfirmationScreen = () => {
               }}
             >
               <Text style={{ fontSize: 16, fontWeight: "500", color: "gray" }}>
-                Delivery
+                Vận chuyển
               </Text>
 
-              <Text style={{ color: "gray", fontSize: 16 }}>₹0</Text>
+              <Text style={{ color: "gray", fontSize: 16 }}>đ0</Text>
             </View>
 
             <View
@@ -527,13 +530,13 @@ const ConfirmationScreen = () => {
               }}
             >
               <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                Order Total
+                Tổng số đơn hàng
               </Text>
 
               <Text
                 style={{ color: "#C60C30", fontSize: 17, fontWeight: "bold" }}
               >
-                ₹{total}
+                đ{total}
               </Text>
             </View>
           </View>
@@ -547,14 +550,15 @@ const ConfirmationScreen = () => {
               marginTop: 10,
             }}
           >
-            <Text style={{ fontSize: 16, color: "gray" }}>Pay With</Text>
+            <Text style={{ fontSize: 16, color: "gray" }}>Thanh toán bằng</Text>
 
             <Text style={{ fontSize: 16, fontWeight: "600", marginTop: 7 }}>
-              Pay on delivery (Cash)
+              Thanh toán khi nhận hàng (Tiền mặt)
             </Text>
           </View>
 
           <Pressable
+
             onPress={handlePlaceOrder}
             style={{
               backgroundColor: "#FFC72C",
@@ -565,7 +569,7 @@ const ConfirmationScreen = () => {
               marginTop: 20,
             }}
           >
-            <Text>Place your order</Text>
+            <Text>Đặt hàng của bạn</Text>
           </Pressable>
         </View>
       )}

@@ -15,12 +15,22 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 
 const AddressScreen = () => {
+  const handleDeleteAddress = (index) => {
+    // Tạo một bản sao của danh sách địa chỉ
+    const updatedAddresses = [...addresses];
+
+    // Sử dụng index để xóa địa chỉ khỏi danh sách
+    updatedAddresses.splice(index, 1);
+
+    // Cập nhật lại danh sách địa chỉ
+    setAddresses(updatedAddresses);
+  };
     const navigation = useNavigation();
   const [name, setName] = useState("");
-  const [mobileNo, setMobileNo] = useState("");
+  const [sdt, setsdt] = useState("");
   const [houseNo, setHouseNo] = useState("");
   const [street, setStreet] = useState("");
-  const [landmark, setLandmark] = useState("");
+  const [khuvuc, setkhuvuc] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const {userId,setUserId} = useContext(UserType)
   useEffect(() => {
@@ -37,27 +47,29 @@ const AddressScreen = () => {
   const handleAddAddress = () => {
       const address = {
           name,
-          mobileNo,
+          sdt,
           houseNo,
           street,
-          landmark,
+          khuvuc,
           postalCode
       }
+      
+  
 
-      axios.post("http://localhost:8000/addresses",{userId,address}).then((response) => {
-          // Alert.alert("Success","Addresses added successfully");
+      axios.post("http://10.0.61.254:8080/addresses",{userId,address}).then((response) => {
+          Alert.alert("Thành Công","Thêm địa chỉ thành công");
           setName("");
-          setMobileNo("");
+          setsdt("");
           setHouseNo("");
           setStreet("");
-          setLandmark("");
+          setkhuvuc("");
           setPostalCode("");
 
           setTimeout(() => {
             navigation.goBack();
           },500)
       }).catch((error) => {
-          // Alert.alert("Error","Failed to add address")
+           Alert.alert("Lỗi","Lỗi thêm địa chỉ")
           console.log("error",error)
       })
   }
@@ -67,12 +79,12 @@ const AddressScreen = () => {
 
       <View style={{ padding: 10 }}>
         <Text style={{ fontSize: 17, fontWeight: "bold" }}>
-          Add a new Address
+        Thêm địa chỉ mới
         </Text>
 
         <TextInput
           placeholderTextColor={"black"}
-          placeholder="India"
+          placeholder="Việt Nam"
           style={{
             padding: 10,
             borderColor: "#D0D0D0",
@@ -84,7 +96,7 @@ const AddressScreen = () => {
 
         <View style={{ marginVertical: 10 }}>
           <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            Full name (First and last name)
+          Họ và tên
           </Text>
 
           <TextInput
@@ -98,18 +110,18 @@ const AddressScreen = () => {
               marginTop: 10,
               borderRadius: 5,
             }}
-            placeholder="enter your name"
+            placeholder="nhập tên của bạn"
           />
         </View>
 
         <View>
           <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            Mobile numebr
+            Số điện thoại
           </Text>
 
           <TextInput
-            value={mobileNo}
-            onChangeText={(text) => setMobileNo(text)}
+            value={sdt}
+            onChangeText={(text) => setsdt(text)}
             placeholderTextColor={"black"}
             style={{
               padding: 10,
@@ -118,13 +130,13 @@ const AddressScreen = () => {
               marginTop: 10,
               borderRadius: 5,
             }}
-            placeholder="Mobile No"
+            placeholder="nhập số điện thoại"
           />
         </View>
 
         <View style={{ marginVertical: 10 }}>
           <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            Flat,House No,Building,Company
+          Căn hộ,Số nhà,Tòa nhà,Công ty
           </Text>
 
           <TextInput
@@ -144,7 +156,7 @@ const AddressScreen = () => {
 
         <View>
           <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            Area,Street,sector,village
+          Khu vực, Đường phố, thôn
           </Text>
           <TextInput
             value={street}
@@ -157,15 +169,15 @@ const AddressScreen = () => {
               marginTop: 10,
               borderRadius: 5,
             }}
-            placeholder=""
+            placeholder="VD: 96 ngõ 2 Hoàng Quốc Việt"
           />
         </View>
 
         <View style={{ marginVertical: 10 }}>
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>Landmark</Text>
+          <Text style={{ fontSize: 15, fontWeight: "bold" }}>Khu Vực</Text>
           <TextInput
-            value={landmark}
-            onChangeText={(text) => setLandmark(text)}
+            value={khuvuc}
+            onChangeText={(text) => setkhuvuc(text)}
             placeholderTextColor={"black"}
             style={{
               padding: 10,
@@ -174,12 +186,12 @@ const AddressScreen = () => {
               marginTop: 10,
               borderRadius: 5,
             }}
-            placeholder="Eg near appollo hospital"
+            placeholder="Ví dụ gần trường đại học điện lực"
           />
         </View>
 
         <View>
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>Pincode</Text>
+          <Text style={{ fontSize: 15, fontWeight: "bold" }}>Mã code</Text>
 
           <TextInput
             value={postalCode}
@@ -192,11 +204,12 @@ const AddressScreen = () => {
               marginTop: 10,
               borderRadius: 5,
             }}
-            placeholder="Enter Pincode"
+            placeholder="Nhập mã code"
           />
         </View>
 
         <Pressable
+        key="address"
         onPress={handleAddAddress}
           style={{
             backgroundColor: "#FFC72C",
@@ -207,7 +220,7 @@ const AddressScreen = () => {
             marginTop: 20,
           }}
         >
-          <Text style={{ fontWeight: "bold" }}>Add Address</Text>
+          <Text style={{ fontWeight: "bold" }}>Thêm địa chỉ</Text>
         </Pressable>
       </View>
     </ScrollView>
